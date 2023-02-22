@@ -16,7 +16,7 @@ New container-images for both the [CyberChef master branch](https://github.com/g
 ## Run
 
 ```bash
-docker run -d -p 8000:8000 mpepping/cyberchef
+docker run -d -p 8000:8000 peterlewis/cyberchef
 ```
 
 A listing of all available version tags can be found on the [Docker Hub](https://hub.docker.com/r/peterlewis/cyberchef/tags) page.
