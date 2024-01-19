@@ -28,9 +28,15 @@ LABEL maintainer="Peter Lewis <peter@peterlew.is>" \
     org.label-schema.vendor="Peter Lewis" \
     org.label-schema.docker.cmd="docker run -it peterlewis/cyberchef:latest"
 
-# old http-server was running on port 8000, avoid breaking change
-RUN sed -i 's|listen       8080;|listen       8000;|g' /etc/nginx/conf.d/default.conf
-
+# old http-server was running on port 8000, avoid breaking change; also, add IPv6 listener
+RUN sed -i \
+    -e 's/listen       8080;/listen       8000;/g' \
+    -e '/listen       8000;/a\' \
+    -e '    listen       [::]:8000;' /etc/nginx/conf.d/default.conf
+    
 COPY --from=build /srv/build/prod /usr/share/nginx/html
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -sf -o /dev/null http://localhost:8000 || exit 1
 
 EXPOSE 8000
